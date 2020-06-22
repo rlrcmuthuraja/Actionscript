@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalScrollPolicy="off" verticalScrollPolicy="off"  horizontalAlign="center"  verticalAlign="middle">
+	<mx:Canvas horizontalScrollPolicy="off" verticalScrollPolicy="off" backgroundColor="{data.group? 0x0984F7 : 0xffffff }" width="85%">
+		<mx:Image
+				  source="{data.icon}" horizontalCenter="0" top="10"/>
+		<mx:Label y="80"
+				  text="{data.label}"
+				  horizontalCenter="0"/>
+	</mx:Canvas>
+</mx:VBox>

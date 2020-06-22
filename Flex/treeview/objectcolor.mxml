@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:RadioButton xmlns:mx="http://www.adobe.com/2006/mxml"		   
+		    initialize="init()"
+		   click="fn()" fillAlphas="[1.0, 1.0]" fillColors="{col}" enabled="false">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.treeClasses.TreeItemRenderer;			
+			import mx.controls.Alert;
+			import mx.utils.ObjectUtil;
+			[Bindable]			
+			private var col:Array=new Array();
+
+			private function init():void			{
+				
+				col.push((parent as TreeItemRenderer).data.@col);
+				col.push((parent as TreeItemRenderer).data.@col);
+
+			}
+
+			private function fn():void
+			{
+				//Alert.show(parent as TreeListData).label.toString();
+				//Alert.show(ObjectUtil.toString((parent as TreeItemRenderer).data.@col));
+				
+			}
+		]]>
+	</mx:Script>
+
+</mx:RadioButton>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HorizontalList xmlns:mx="http://www.adobe.com/2006/mxml"
+				   itemRenderer="CustomComponents.filmstrip.listRenderer"
+				   dataProvider="{thumblist}"
+				   columnCount="5"
+				   columnWidth="130"
+				   rowCount="1"
+				   rowHeight="110"
+				   horizontalScrollPolicy="on"
+				   themeColor="#FF1E00"
+				   itemClick="IamSelected(event)"
+				   horizontalScrollPosition="{hpos}">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import CustomEvents.MyEvent;
+			import flash.events.Event;
+			import mx.core.Application;
+
+			[Bindable]
+			private var hpos:Number=0;
+			[Bindable]
+			public var thumblist:ArrayCollection=new ArrayCollection();
+
+			private var i:Number;
+			private var nextVval:Number;
+			private var found:Boolean;
+			private var dm:Number;
+			private var d:Number;
+			private var indexNum:Number;
+
+
+			/*  Select the Item By Bragma Value */
+			public function selectByBregma(bregmaVal:Number):void
+			{
+				found=false;
+				indexNum=0;
+				dm=Number.MAX_VALUE;
+				for (i=0; i < thumblist.length; i++)
+				{
+					if (Number(thumblist[i].bregmaVal) == Number(bregmaVal))
+					{
+						indexNum=i;
+						scrolto(indexNum)
+						found=true;
+						break;
+					}
+				}
+				if (found == false)
+				{
+					for (i=0; i < thumblist.length; i++)
+					{
+						d=Math.abs(Number(thumblist[i].bregmaVal) - Number(bregmaVal));
+						if (d < dm)
+						{
+							indexNum=i;
+							dm=d;
+						}
+					}
+					scrolto(indexNum);
+				}
+				dispatchEvent(new MyEvent(MyEvent.LIST_INDEX_CHANGE, true, true, thumblist[indexNum]));
+			}
+
+
+			public function highlight(arr:Array):void
+			{
+				/* Highlighting Item */
+				if (arr != null)
+				{
+					for (var i:Number=0; i < thumblist.length; i++)
+					{
+						thumblist[i].group=false;
+
+						for (var k:Number=0; k < arr.length; k++)
+						{
+							if (thumblist[i].id == arr[k])
+							{
+								thumblist[i].group=true;
+							}							
+						}
+					}
+					thumblist.refresh();
+				}
+				else
+				{
+					for (var l:Number=0; l < thumblist.length; l++)
+					{
+						thumblist[l].group=false;
+					}
+					thumblist.refresh();
+				}
+			/* Move to 1st Index of Highlighted Items */
+			/*indexNum=0;
+			   for (i=0; i < thumblist.length; i++)
+			   {
+			   if (Number(thumblist[i].id) == Number(arr[0]))
+			   {
+			   indexNum=i;
+			   scrolto(indexNum);
+			   break;
+			   }
+			   }
+			   //Alert.show(indexNum.toString());
+			 dispatchEvent(new MyEvent(MyEvent.LIST_BG_CHANGE, true, true, thumblist[0])); */
+			}
+
+			/* Scroll to the Position */
+			public function scrolto(val:Number):void
+			{
+				hpos=val;
+				this.selectedIndex=val;
+			}
+
+			public function getSelectedItem():Object
+			{
+				return this.selectedItem;
+			}
+
+			private function IamSelected(e:Event):void
+			{
+				dispatchEvent(new MyEvent(MyEvent.LIST_CLICK, true, true, this.selectedItem));
+			}
+		]]>
+	</mx:Script>
+
+</mx:HorizontalList>

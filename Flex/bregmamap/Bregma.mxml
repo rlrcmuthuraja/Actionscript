@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+		   width="211"
+		   height="119"
+		   backgroundColor="#FFFFFF"
+		   >
+	<mx:Script>
+		<![CDATA[
+			import CustomComponents.bregmamap.FlexibleSliderThumb;
+			import mx.controls.Alert;
+			import CustomEvents.MyEvent;
+			import mx.core.Application;
+
+			[Bindable]
+			public var bregmaBGimg:String;
+
+			[Bindable]
+			public var minBregma:Number;
+
+			[Bindable]
+			public var maxBregma:Number;
+
+
+			[Embed(source="bar.gif")]
+			private var slskin:Class;
+
+			[Bindable]
+			public var val:Number=0;
+
+
+			public var ConnectedComps:Array;
+
+			public function getBregma():Number
+			{			
+			return int((bregma.value) * 100) / 100;
+			}
+
+			public function setBregma(v:Number):Number
+			{				
+				val=v;
+				return v;
+			}
+
+			private function bregma_click():void
+			{
+				var bregmaObj:Object=new Object();
+				bregmaObj.bregmaVal=int((bregma.value) * 100) / 100;				
+				dispatchEvent(new MyEvent(MyEvent.BREGMA_CLICK, true, true,bregmaObj));
+				
+			}
+		]]>
+	</mx:Script>
+
+	<!--trackSkin="{bgimg}"-->
+	<mx:Image x="0"
+			  y="0"
+			  source="{bregmaBGimg}"/>
+	<mx:HSlider x="0"
+				value="{val}"
+				id="bregma"
+				y="0"
+				allowTrackClick="true"
+				liveDragging="true"
+				width="211"
+				thumbUpSkin="{slskin}"
+				thumbDownSkin="{slskin}"
+				thumbOverSkin="{slskin}"
+				thumbDisabledSkin="{slskin}"
+				sliderThumbClass="{CustomComponents.bregmamap.FlexibleSliderThumb}"
+				minimum="{minBregma}"
+				maximum="{maxBregma}"
+				trackSkin="{CustomComponents.bregmamap.CustomSlidebar}"
+				change="bregma_click()"
+				enabled="true"/>
+
+
+
+
+</mx:Canvas>

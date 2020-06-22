@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+		   width="400"
+		   height="300"
+		   >
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.treeClasses.TreeItemRenderer;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Label;
+			import mx.controls.Button;
+			import mx.controls.Alert;
+			import CustomEvents.MyEvent;
+			import mx.core.Application;
+			import mx.utils.ObjectUtil;
+			[Bindable]
+			public var selectedNode:XML;
+
+			[Bindable]
+			public var xlcBalanced:XMLListCollection
+
+			[Bindable]
+			public var treeXML:XMLList=new XMLList();
+
+
+			private function expandParents(xmlNode:XML):void
+			{
+				while (xmlNode.parent() != null)
+				{
+					xmlNode=xmlNode.parent();
+					myTree.expandItem(xmlNode, true, false);
+				}
+			}
+
+			public function findbyName(str:String):void
+			{				
+				var xmllistDescendants:XMLList=treeXML.descendants().(@label == str);
+				expandParents(xmllistDescendants[0]);
+				myTree.selectedItem=xmllistDescendants[0];
+			}
+			public function findbyBregma(val:Number):void
+			{				
+				var str:String=val.toString();
+				var xmllistDescendants:XMLList=treeXML.descendants().(@bregma == str);
+				expandParents(xmllistDescendants[0]);
+				myTree.selectedItem=xmllistDescendants[0];
+			}
+
+			public function treeChanged(event:Event):void
+			{
+				var selectedNode:XML;
+				selectedNode=Tree(event.target).selectedItem as XML;
+				//selectedNode.@label			
+				dispatchEvent(new MyEvent(MyEvent.TREE_CLICK, true, true,selectedNode));
+				
+				getSelectedNodeName();
+
+			}
+
+			private function closeAllNodes():void
+			{
+				myTree.openItems=[];
+
+			}
+			
+			public function getSelectedNodeName():XML
+			{
+				var selectedNode:XML;
+				selectedNode=myTree.selectedItem as XML;				
+				return selectedNode;			
+			}
+		]]>
+	</mx:Script>
+	<mx:Tree id="myTree"
+			 width="100%"
+			 height="100%"
+			 labelField="@label"
+			 dataProvider="{treeXML}"
+			 defaultLeafIcon="CustomComponents.treeview.objectcolor"
+			 folderClosedIcon="CustomComponents.treeview.objectcolor"
+			 folderOpenIcon="CustomComponents.treeview.objectcolor"
+			 allowMultipleSelection="true"
+			 change="treeChanged(event)"/>
+</mx:Canvas>
+
+
+
+
+
